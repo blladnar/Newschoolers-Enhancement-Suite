@@ -4,6 +4,13 @@ nextPageNumber = -1;
 function loadNewPosts()
 {
     stopReloading = true;
+    
+//    var loadingDiv = $("<div id='infiniLoader'>Loading...</div>");
+//    loadingDiv.css("position","absolute");
+//    loadingDiv.css("top", (($(window).height() - loadingDiv.outerHeight()) / 2) + $(window).scrollTop() + "px");
+//    loadingDiv.css("left", (($(window).width() - loadingDiv.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+//    
+//    $("<body>").append(loadingDiv);
 	
 	var pageURL = window.location.href;
 	var pieces = pageURL.split('/');
@@ -45,8 +52,6 @@ function loadNewPosts()
     
 }
 
-
-// Load Infiniscroll
 function turnOnInfiniscroll()
 {	
 	$(window).scroll(function(){
@@ -61,14 +66,36 @@ function turnOnInfiniscroll()
 	});	
 }
 
-turnOnInfiniscroll();
+ 
+function getAnswer(theMessageEvent) 
+{
+    if (theMessageEvent.name === "infiniscroll")
+    {
+		if( !theMessageEvent.message )
+		{
+			$(window).scroll(function(){});
+		}
+		else
+		{
+			turnOnInfiniscroll();
+		}
+    }
+}
 
-
-// Remove Signatures
 function removeSignatures()
 {
 	$(".sig").remove();
 }
 
+if (window.top === window) 
+{
+
+   // The parent frame is the top-level frame, not an iframe.
+
+    // All non-iframe code goes before the closing brace.
+turnOnInfiniscroll();
 removeSignatures();
+safari.self.addEventListener("message", getAnswer, false);
+
+}
 
